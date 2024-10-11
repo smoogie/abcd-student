@@ -12,6 +12,11 @@ pipeline {
                 }
             }
         }
+        stage('preset') {
+            steps {
+                sh 'mkdir -p results/'
+            }
+        }
         stage('[ZAP] Baseline passive-scan') {
             steps {
                 sh '''
@@ -27,16 +32,24 @@ pipeline {
                         --add-host=host.docker.internal:host-gateway \
                         -v /home/lupa/repos/github/smoogie/abcd-student/.zap:/zap/wrk/:rw \
                         -t ghcr.io/zaproxy/zaproxy:stable bash -c \
-                        "ls /zap/wrk -al && zap.sh -cmd -addonupdate; zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta -autorun /zap/wrk/passive.yaml" \
+                        "zap.sh -cmd -addonupdate; zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta -autorun /zap/wrk/passive.yaml" || true \
                 '''
             }
             post {
                 always {
                     sh '''
-                        docker cp zap:/zap/wrk/zap_xml_report.xml ${WORKSPACE}/zap_xml_report.xml
+                        docker cp zap:/zap/wrk/reports/zap_xml_report.xml ${WORKSPACE}/results/zap_xml_report.xml
                         docker stop zap juice-shop
                         docker rm zap juice-shop
                     '''
+                }
+            }
+            post {
+                always {
+                    echo "archive results"
+                    archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchives: true
+                    // echo "sendind to DefectDojo"
+                    // defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName:'Juice Shop', scanType:'ZAP Scan', engagementName:'	lukasz.pawlowski.inf@gmail.com')
                 }
             }
         }
