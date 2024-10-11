@@ -38,7 +38,7 @@ pipeline {
             post {
                 always {
                     sh '''
-                        docker cp zap:/zap/wrk/reports/zap_xml_report.xml ${WORKSPACE}/results/zap_xml_report.xml
+                        docker cp zap:/zap/wrk/zap_xml_report.xml ${WORKSPACE}/results/zap_xml_report.xml
                         docker stop zap juice-shop
                         docker rm zap juice-shop
                     '''
@@ -50,8 +50,8 @@ pipeline {
         always {
             echo "archive results"
             archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
-            // echo "sendind to DefectDojo"
-            // defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName:'Juice Shop', scanType:'ZAP Scan', engagementName:'	lukasz.pawlowski.inf@gmail.com')
+            echo "sendind to DefectDojo"
+            defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName:'Juice Shop', scanType:'ZAP Scan', engagementName:'	lukasz.pawlowski.inf@gmail.com')
         }
     }
 }
