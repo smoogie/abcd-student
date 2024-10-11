@@ -20,10 +20,12 @@ pipeline {
                         bkimminich/juice-shop
                     sleep 5
                 '''
+                // --mount "src=abcd-lab,dst=/zap/wrk,volume-subpath=workspace/abc_devsecops/.zap" \
+                // -v /home/lupa/repos/github/smoogie/abcd-student/.zap:/zap/wrk/:rw \
                 sh '''
                     docker run --name zap \
                         --add-host=host.docker.internal:host-gateway \
-                        --mount "src=abcd-lab,dst=/zap/wrk,volume-subpath=workspace/abc_devsecops/.zap" \
+                        -v /home/lupa/repos/github/smoogie/abcd-student/.zap:/zap/wrk/:rw \
                         -t ghcr.io/zaproxy/zaproxy:stable bash -c \
                         "ls /zap/wrk -al && zap.sh -cmd -addonupdate; zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta -autorun /zap/wrk/passive.yaml" \
                 '''
