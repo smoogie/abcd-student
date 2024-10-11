@@ -23,9 +23,9 @@ pipeline {
                 sh '''
                     docker run --name zap \
                         --add-host=host.docker.internal:host-gateway \
-                        -v ${WORKSPACE}:/zap/wrk \
+                        --mount "src=abcd-lab,dst=/zap/wrk,volume-subpath=workspace/abc_devsecops/.zap" \
                         -t ghcr.io/zaproxy/zaproxy:stable bash -c \
-                        "ls /zap/wrk/.zap -al && zap.sh -cmd -addonupdate; zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta -autorun /zap/wrk/.zap/passive.yaml" \
+                        "ls /zap/wrk -al && zap.sh -cmd -addonupdate; zap.sh -cmd -addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta -autorun /zap/wrk/passive.yaml" \
                 '''
             }
             post {
