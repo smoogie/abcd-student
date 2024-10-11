@@ -47,7 +47,7 @@ pipeline {
             post {
                 always {
                     echo "archive results"
-                    archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchives: true
+                    archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
                     // echo "sendind to DefectDojo"
                     // defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName:'Juice Shop', scanType:'ZAP Scan', engagementName:'	lukasz.pawlowski.inf@gmail.com')
                 }
