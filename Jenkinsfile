@@ -8,7 +8,7 @@ pipeline {
             steps {
                 script {
                     cleanWs()
-                    git credentialsId: 'github-pat', url: 'https://github.com/smoogie/abcd-student.git', branch: 'dast-test'
+                    git credentialsId: 'github-pat', url: 'https://github.com/smoogie/abcd-student.git', branch: 'main'
                 }
             }
         }
