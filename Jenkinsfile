@@ -51,6 +51,8 @@ pipeline {
                 osv-scanner scan --lockfile package-lock.json --format json > ${WORKSPACE}/results/osv_scan.json
                 '''
             }
+        }
+    }
     post {
         always {
             echo "archive results"
