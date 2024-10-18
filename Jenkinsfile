@@ -8,7 +8,7 @@ pipeline {
             steps {
                 script {
                     cleanWs()
-                    git credentialsId: 'github-pat', url: 'https://github.com/smoogie/abcd-student.git', branch: 'sca_test'
+                    git credentialsId: 'github-pat', url: 'https://github.com/smoogie/abcd-student.git', branch: 'main'
                 }
             }
         }
@@ -59,7 +59,7 @@ pipeline {
             archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
             echo "sendind to DefectDojo"
             defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName:'Juice Shop', scanType:'ZAP Scan', engagementName:'	lukasz.pawlowski.inf@gmail.com')
-//             defectDojoPublisher(artifact: 'results/osv_scan.json', productName:'Juice Shop', scanType:'OSV Scan', engagementName:'	lukasz.pawlowski.inf@gmail.com')
+            defectDojoPublisher(artifact: 'results/osv_scan.json', productName:'Juice Shop', scanType:'OSV Scan', engagementName:'	lukasz.pawlowski.inf@gmail.com')
 //             defectDojoPublisher(artifact: 'results/trufflehog_report.json', productName:'Juice Shop', scanType:'Trufflehog Scan', engagementName:'	lukasz.pawlowski.inf@gmail.com')
 //             defectDojoPublisher(artifact: 'results/semgrep_report.json', productName:'Juice Shop', scanType:'Semgrep JSON Report', engagementName:'	lukasz.pawlowski.inf@gmail.com')
         }
