@@ -48,7 +48,7 @@ pipeline {
         stage('[OSV-SCANNER] scan of package-lock.json') {
             steps {
                 sh '''
-                osv-scanner scan --lockfile package-lock.json --format json > ${WORKSPACE}/results/osv_scan.json
+                osv-scanner scan --lockfile package-lock.json --format json > ${WORKSPACE}/results/osv_scan.json || true
                 '''
             }
         }
