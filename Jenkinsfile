@@ -45,6 +45,13 @@ pipeline {
                 }
             }
         }
+        stage('[OSV-SCANNER] scan of package-lock.json') {
+            steps {
+                sh '''
+                osv-scanner scan --lockfile package-lock.json --format json > ${WORKSPACE}/results/osv_scan.json || true
+                '''
+            }
+        }
     }
     post {
         always {
@@ -52,6 +59,9 @@ pipeline {
             archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
             echo "sendind to DefectDojo"
             defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName:'Juice Shop', scanType:'ZAP Scan', engagementName:'	lukasz.pawlowski.inf@gmail.com')
+            defectDojoPublisher(artifact: 'results/osv_scan.json', productName:'Juice Shop', scanType:'OSV Scan', engagementName:'	lukasz.pawlowski.inf@gmail.com')
+//             defectDojoPublisher(artifact: 'results/trufflehog_report.json', productName:'Juice Shop', scanType:'Trufflehog Scan', engagementName:'	lukasz.pawlowski.inf@gmail.com')
+//             defectDojoPublisher(artifact: 'results/semgrep_report.json', productName:'Juice Shop', scanType:'Semgrep JSON Report', engagementName:'	lukasz.pawlowski.inf@gmail.com')
         }
     }
 }
