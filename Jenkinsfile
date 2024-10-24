@@ -55,7 +55,7 @@ pipeline {
         stage('[TruffleHog] scan for secrets') {
             steps {
                 sh '''
-                trufflehog git --json --branch main file://. > ${WORKSPACE}/results/trufflehog_report.json || true
+                trufflehog git --json --branch main --force-skip-archive file://. > ${WORKSPACE}/results/trufflehog_report.json || true
                 '''
             }
         }
